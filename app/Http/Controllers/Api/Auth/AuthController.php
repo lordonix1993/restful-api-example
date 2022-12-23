@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
+use App\Http\Requests\ApiRegistrationRequest;
 use \Illuminate\Http\JsonResponse;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -15,26 +17,44 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['login', 'refresh']]);
+        $this->middleware('jwt.auth', ['except' => ['login', 'refresh', 'registration']]);
     }
 
     /**
      * Get a JWT via given credentials.
+     *
+     *  @param  ApiLoginRequest $request
      *
      * @return JsonResponse
      */
     public function login(ApiLoginRequest $request): JsonResponse
     {
         $credentials = $request->all();
+        return $this->loginProcess($credentials);
+    }
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json([
-                'success'   => false,
-                'message'   => __('auth.login_error')
-            ], 401);
+    /**
+     * Registration user and Get a JWT via given credentials.
+     *
+     *  @param  ApiRegistrationRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function registration(ApiRegistrationRequest $request): JsonResponse
+    {
+        $credentials = $request->all();
+
+        try {
+            User::create([
+                'name' => $credentials['name'],
+                'email' => $credentials['email'],
+                'password' => bcrypt($credentials['password'])
+            ]);
+        } catch(\Exception $error) {
+            return $this->respondUnauthorized(__('auth.registration_error'));
         }
 
-        return $this->respondWithToken($token);
+        return $this->loginProcess($credentials);
     }
 
     /**
@@ -83,7 +103,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    private function respondWithToken($token): JsonResponse
+    private function respondWithToken(string $token): JsonResponse
     {
         return response()->json([
             'success'   => true,
@@ -94,5 +114,35 @@ class AuthController extends Controller
                 'expires_in'    => auth()->factory()->getTTL() * 60
             ]
         ]);
+    }
+
+    /**
+     * Response with 401 Unauthorized
+     *
+     * @param  string $message
+     *
+     * @return JsonResponse
+     */
+    private function respondUnauthorized($message): JsonResponse
+    {
+        return response()->json([
+            'success'   => false,
+            'message'   => $message
+        ], 401);
+    }
+
+    /**
+     * Method login user
+     *
+     * @param  array $credentials
+     *
+     * @return JsonResponse
+     */
+    private function loginProcess(array $credentials): JsonResponse {
+        if (! $token = auth()->attempt($credentials)) {
+            return $this->respondUnauthorized(__('auth.login_error'));
+        }
+
+        return $this->respondWithToken($token);
     }
 }

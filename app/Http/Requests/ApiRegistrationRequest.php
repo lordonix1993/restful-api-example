@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class ApiLoginRequest extends FormRequest
+class ApiRegistrationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,8 @@ class ApiLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'     => 'required|max:255|email:rfc,dns|',
+            'name'      => 'required|max:255',
+            'email'     => 'required|max:255|email:rfc,dns|unique:users,email|',
             'password'  => 'required|min:8',
         ];
     }
@@ -41,7 +42,7 @@ class ApiLoginRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,
-            'message'   => __('auth.validation_login_errors'),
+            'message'   => __('auth.validation_registration_errors'),
             'data'      => $validator->errors()
         ], 401));
     }

@@ -158,13 +158,7 @@ return [
     */
 
     'custom' => [
-        'email' => [
-            'required' => 'The field `email` is required'
-        ],
-        'password' => [
-            'required' => 'The field `password` is required',
-            'min' => 'The field `password` has less than :min symbols'
-        ],
+
     ],
 
     /*
