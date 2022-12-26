@@ -19,25 +19,49 @@ class AuthController extends Controller
     {
         $this->middleware('jwt.auth', ['except' => ['login', 'refresh', 'registration']]);
     }
-
     /**
-     * Get a JWT via given credentials.
+     * @OA\Post(
+     * path="/api/auth/registration",
+     *   tags={"Auth"},
+     *   summary="Registration",
+     *   description="Registration users. If registration will be successfully you get Bearer Token",
+     *   operationId="registration",
      *
-     *  @param  ApiLoginRequest $request
+     *   @OA\Parameter(
+     *      name="name",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
      *
-     * @return JsonResponse
-     */
-    public function login(ApiLoginRequest $request): JsonResponse
-    {
-        $credentials = $request->all();
-        return $this->loginProcess($credentials);
-    }
-
-    /**
-     * Registration user and Get a JWT via given credentials.
-     *
-     *  @param  ApiRegistrationRequest $request
-     *
+     *  @OA\Parameter(
+     *      name="email",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     *  ),
+     * )
+     * @param ApiRegistrationRequest $request
      * @return JsonResponse
      */
     public function registration(ApiRegistrationRequest $request): JsonResponse
@@ -57,9 +81,69 @@ class AuthController extends Controller
         return $this->loginProcess($credentials);
     }
 
+
     /**
-     * Get the authenticated User.
+     * @OA\Post(
+     * path="/api/auth/login",
+     *   tags={"Auth"},
+     *   summary="Authorization",
+     *   description="Authorization users to get Bearer Token",
+     *   operationId="login",
      *
+     *  @OA\Parameter(
+     *      name="email",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     *  ),
+     * )
+     * @param ApiLoginRequest $request
+     * @return JsonResponse
+     */
+    public function login(ApiLoginRequest $request): JsonResponse
+    {
+        $credentials = $request->all();
+        return $this->loginProcess($credentials);
+    }
+
+    /**
+     * @OA\Post(
+     * path="/api/auth/me",
+     *   tags={"Auth"},
+     *   summary="Get authorized user details",
+     *   description="Get current authorized user details",
+     *   operationId="me",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     *  ),
+     * )
      * @return JsonResponse
      */
     public function me(): JsonResponse
@@ -72,8 +156,25 @@ class AuthController extends Controller
     }
 
     /**
-     * Log the user out (Invalidate the token).
+     * @OA\Post(
+     * path="/api/auth/logout",
+     *   tags={"Auth"},
+     *   summary="Logout",
+     *   description="Logout user",
+     *   operationId="logout",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
      *
+     *   @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     *  ),
+     * )
      * @return JsonResponse
      */
     public function logout(): JsonResponse
@@ -82,7 +183,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success'   => true,
-            'message'   => __('auth.logout')
+            'message'   => __('auth.logout_success')
         ]);
     }
 
