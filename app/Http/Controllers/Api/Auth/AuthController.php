@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ApiLoginRequest;
-use App\Http\Requests\ApiRegistrationRequest;
-use \Illuminate\Http\JsonResponse;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegistrationRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -21,7 +21,7 @@ class AuthController extends Controller
     }
     /**
      * @OA\Post(
-     * path="/api/auth/registration",
+     *   path="/api/auth/registration",
      *   tags={"Auth"},
      *   summary="Registration",
      *   description="Registration users. If registration will be successfully you get Bearer Token",
@@ -61,10 +61,10 @@ class AuthController extends Controller
      *     description="Unauthenticated",
      *  ),
      * )
-     * @param ApiRegistrationRequest $request
+     * @param RegistrationRequest $request
      * @return JsonResponse
      */
-    public function registration(ApiRegistrationRequest $request): JsonResponse
+    public function registration(RegistrationRequest $request): JsonResponse
     {
         $credentials = $request->all();
 
@@ -84,7 +84,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/auth/login",
+     *   path="/api/auth/login",
      *   tags={"Auth"},
      *   summary="Authorization",
      *   description="Authorization users to get Bearer Token",
@@ -115,10 +115,10 @@ class AuthController extends Controller
      *     description="Unauthenticated",
      *  ),
      * )
-     * @param ApiLoginRequest $request
+     * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function login(ApiLoginRequest $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->all();
         return $this->loginProcess($credentials);
@@ -126,7 +126,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/auth/me",
+     *   path="/api/auth/me",
      *   tags={"Auth"},
      *   summary="Get authorized user details",
      *   description="Get current authorized user details",
@@ -157,7 +157,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     * path="/api/auth/logout",
+     *   path="/api/auth/logout",
      *   tags={"Auth"},
      *   summary="Logout",
      *   description="Logout user",
