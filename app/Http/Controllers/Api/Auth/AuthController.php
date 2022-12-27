@@ -10,6 +10,9 @@ use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+    private bool $loginProcessMethod = false;
+    private string $token = '';
+
     /**
      * Create a new AuthController instance.
      *
@@ -75,7 +78,7 @@ class AuthController extends Controller
                 'password' => bcrypt($credentials['password'])
             ]);
         } catch(\Exception $error) {
-            return $this->respondUnauthorized(__('auth.registration_error'));
+            return $this->responseJSON(__('auth.response.422.register', 422));
         }
 
         return $this->loginProcess($credentials);
@@ -120,6 +123,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
+        $this->loginProcessMethod = true;
         $credentials = $request->all();
         return $this->loginProcess($credentials);
     }
@@ -148,11 +152,12 @@ class AuthController extends Controller
      */
     public function me(): JsonResponse
     {
-        return response()->json([
-            'success'   => true,
-            'message'   => __('auth.user_data'),
-            'data'      => auth()->user()
-        ]);
+        $user_data = auth()->user();
+        return $this->responseJSON(
+            __('auth.response.200.me'),
+            200,
+            $user_data != null ? $user_data->toArray() : []
+        );
     }
 
     /**
@@ -180,11 +185,7 @@ class AuthController extends Controller
     public function logout(): JsonResponse
     {
         auth()->logout();
-
-        return response()->json([
-            'success'   => true,
-            'message'   => __('auth.logout_success')
-        ]);
+        return $this->responseJSON(__('auth.response.200.logout'));
     }
 
     /**
@@ -194,42 +195,34 @@ class AuthController extends Controller
      */
     public function refresh(): JsonResponse
     {
-        return $this->respondWithToken(auth()->refresh());
+        $this->token = auth()->refresh();
+        if(!empty($this->token)) {
+            return $this->responseJSON(
+                __('response.200.refresh_token'),
+                200,
+                $this->getTokenData()
+            );
+        }
+        return $this->responseJSON(__('response.422.token'), 422);
     }
 
     /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return JsonResponse
-     */
-    private function respondWithToken(string $token): JsonResponse
-    {
-        return response()->json([
-            'success'   => true,
-            'message'   => __('auth.generated_token'),
-            'data'      => [
-                'access_token'  => $token,
-                'token_type'    => 'bearer',
-                'expires_in'    => auth()->factory()->getTTL() * 60
-            ]
-        ]);
-    }
-
-    /**
-     * Response with 401 Unauthorized
+     * Response JSON format
      *
      * @param  string $message
+     * @param  int $code
+     * @param  array $data
      *
      * @return JsonResponse
      */
-    private function respondUnauthorized($message): JsonResponse
+    private function responseJSON(string $message, int $code = 200, array $data = []): JsonResponse
     {
-        return response()->json([
-            'success'   => false,
+        $json = [
+            'success'   => $code == 200 ? true : false,
             'message'   => $message
-        ], 401);
+        ];
+        if(!empty($data)) $json['data'] = $data;
+        return response()->json($json, $code);
     }
 
     /**
@@ -240,10 +233,21 @@ class AuthController extends Controller
      * @return JsonResponse
      */
     private function loginProcess(array $credentials): JsonResponse {
-        if (! $token = auth()->attempt($credentials)) {
-            return $this->respondUnauthorized(__('auth.login_error'));
+        if (! $this->token = auth()->attempt($credentials)) {
+            return $this->responseJSON(__('auth.response.401', 401));
         }
+        return $this->responseJSON(
+            $this->loginProcessMethod ? __('auth.response.200.login') : __('auth.response.200.register'),
+            200,
+            $this->getTokenData()
+        );
+    }
 
-        return $this->respondWithToken($token);
+    private function getTokenData() {
+        return [
+            'access_token'  => $this->token,
+            'token_type'    => 'bearer',
+            'expires_in'    => auth()->factory()->getTTL() * 60
+        ];
     }
 }

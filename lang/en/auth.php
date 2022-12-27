@@ -16,12 +16,22 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'validation_login_errors' => 'Your authorization data is not correct',
-    'validation_registration_errors' => 'Registration failed ',
-    'generated_token' => 'Token was generated successfully',
-    'logout_success' => 'Successfully logged out',
-    'user_data' => 'User data',
-    'login_error' => 'Unauthorized',
+
+    'response' => [
+        '401' => 'Unauthorized.',
+        '422' => [
+            'validation'    => 'Validation errors.',
+            'register'  => 'Registration failed',
+            'token'         => 'The Token was not generated'
+        ],
+        '200' => [
+            'register'      => 'You have successfully registered.',
+            'login'         => 'You have successfully logged in.',
+            'logout'        => 'You have successfully logged out.',
+            'me'            => 'User data.',
+            'refresh_token' => 'You have successfully refreshed token.'
+        ]
+    ],
     'registration_error' => 'Registration failed',
 
 ];
