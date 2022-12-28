@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\AbstractApiController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegistrationRequest;
 use App\Models\User;
@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenBlacklistedException;
 
-class AuthController extends Controller
+class AuthController extends AbstractApiController
 {
     private bool $loginProcessMethod = false;
     private string $token = '';
@@ -318,28 +318,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Response JSON format
-     *
-     * @param  string $message
-     * @param  int $code
-     * @param  array $data
-     * @param  string | array $error
-     *
-     * @return JsonResponse
-     */
-    private function responseJSON(string $message, int $code = 200, array $data = [], string | array $error = ''): JsonResponse
-    {
-        $json = [
-            'success'   => $code == 200 ? true : false,
-            'message'   => $message,
-            'error'     => $error,
-            'data'      => []
-        ];
-        if(!empty($data)) $json['data'] = $data;
-        return response()->json($json, $code);
-    }
-
-    /**
      * Method login user
      *
      * @param  array $credentials
@@ -358,7 +336,12 @@ class AuthController extends Controller
         );
     }
 
-    private function getTokenData() {
+    /**
+     * Get current user token
+     *
+     * @return array
+     */
+    protected function getTokenData(): array {
         return [
             'access_token'  => $this->token,
             'token_type'    => 'bearer',
