@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['except' => ['login', 'refresh', 'registration']]);
+
     }
     /**
      * @OA\Post(
@@ -212,14 +212,17 @@ class AuthController extends Controller
      * @param  string $message
      * @param  int $code
      * @param  array $data
+     * @param  string | array $error
      *
      * @return JsonResponse
      */
-    private function responseJSON(string $message, int $code = 200, array $data = []): JsonResponse
+    private function responseJSON(string $message, int $code = 200, array $data = [], string | array $error = ''): JsonResponse
     {
         $json = [
             'success'   => $code == 200 ? true : false,
-            'message'   => $message
+            'message'   => $message,
+            'error'     => $error,
+            'data'      => []
         ];
         if(!empty($data)) $json['data'] = $data;
         return response()->json($json, $code);

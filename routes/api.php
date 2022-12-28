@@ -14,10 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'api', 'prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Auth'], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::post('registration', 'AuthController@registration');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Auth'], function ($router) {
+        Route::post('logout', 'AuthController@logout')->middleware('jwt');
+        Route::post('me', 'AuthController@me')->middleware('jwt');
+        Route::post('login', 'AuthController@login');
+        Route::post('registration', 'AuthController@registration');
+        Route::post('refresh', 'AuthController@refresh');
+    });
 });
