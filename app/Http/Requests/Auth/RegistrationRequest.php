@@ -18,7 +18,7 @@ class RegistrationRequest extends FormRequest
         return [
             'name'      => 'required|max:255',
             'email'     => 'required|max:255|email:rfc,dns|unique:users,email|',
-            'password'  => 'required|min:8',
+            'password'  => 'required|min:8|password',
         ];
     }
 
@@ -33,8 +33,8 @@ class RegistrationRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'success'   => false,
             'message'   => __('auth.response.422.validation'),
-            'error'      => $validator->errors(),
-            'data'      => []
+            'error'     => '',
+            'data'      => $validator->errors()
         ], 422));
     }
 }

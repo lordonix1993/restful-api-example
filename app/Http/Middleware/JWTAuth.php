@@ -25,7 +25,7 @@ class JWTAuth extends BaseMiddleware
         } catch(UnauthorizedHttpException $err) {
             $json = [
                 'success'   => false,
-                'message'   => 'Unauthorized.',
+                'message'   => __('auth.response.401.middleware'),
                 'error'     => $err->getMessage(),
                 'data'      => []
             ];

@@ -18,11 +18,15 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
     'response' => [
-        '401' => 'Unauthorized.',
+        '401' => [
+            'middleware'    => 'Unauthorized.',
+            'login'         => 'Unauthorized. Your credentials are wrong'
+        ],
         '422' => [
             'validation'    => 'Validation errors.',
-            'register'  => 'Registration failed',
-            'token'         => 'The Token was not generated'
+            'register'      => 'Registration failed',
+            'token'         => 'The Token was not generated',
+            'refresh_token' => 'Refresh token failed'
         ],
         '200' => [
             'register'      => 'You have successfully registered.',
