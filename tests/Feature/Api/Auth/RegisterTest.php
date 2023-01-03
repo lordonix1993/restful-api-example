@@ -4,12 +4,12 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class RegisterTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     private array $user = [];
 
@@ -21,7 +21,7 @@ class RegisterTest extends TestCase
     public function setUp(): void {
         parent::setUp();
         $this->user = User::factory()->definition();
-        $this->user['password'] = Str::random(10);
+        $this->user['password'] = $this->faker->password(8);
     }
 
     /**
@@ -112,7 +112,7 @@ class RegisterTest extends TestCase
         $user_data = [
             'name'      => $this->user['name'],
             'email'     => $this->user['email'],
-            'password'  => Str::random(5)
+            'password'  => $this->faker->password(1,5)
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
@@ -136,7 +136,7 @@ class RegisterTest extends TestCase
         $user_data = [
             'name'      => $this->user['name'],
             'email'     => $this->user['email'],
-            'password'  => Str::random(900)
+            'password'  => $this->faker->password(300, 300)
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)

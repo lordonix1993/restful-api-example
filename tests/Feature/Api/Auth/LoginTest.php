@@ -4,12 +4,12 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class LoginTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * The test checks response when request doesn't contain all credentials
@@ -43,14 +43,14 @@ class LoginTest extends TestCase
      */
     public function test_login_throw_error_when_credentials_are_wrong(): void
     {
-        $password = Str::random(10);
-        $user = User::factory()
+        $password = $this->faker->password(8);
+        User::factory()
             ->set('password', bcrypt($password))
             ->create();
 
         $response = $this->post('/api/auth/login', [
-            'email'     => 'test_'.$user['email'],
-            'password'  => 'test123_'.$password
+            'email'     => $this->faker->unique()->freeEmail(),
+            'password'  => $this->faker->password(8)
         ]);
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
@@ -68,7 +68,7 @@ class LoginTest extends TestCase
      */
     public function test_login_throw_success(): void
     {
-        $password = Str::random(10);
+        $password = $this->faker->password(8);
         $user = User::factory()
             ->set('password', bcrypt($password))
             ->create();

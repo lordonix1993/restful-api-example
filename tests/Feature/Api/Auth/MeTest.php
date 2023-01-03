@@ -4,12 +4,12 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class MeTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * The test checks response where don't set token
@@ -38,7 +38,7 @@ class MeTest extends TestCase
     public function test_me_get_response_with_not_correctly_token(): void
     {
         $response = $this->withHeaders([
-            "Authorization" => "Bearer ".Str::random(900)
+            "Authorization" => "Bearer ".$this->faker->sha256()
         ])->post('/api/auth/me');
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
@@ -59,7 +59,7 @@ class MeTest extends TestCase
     public function test_me_get_response_with_successful_token(): void
     {
         $response_login_arr = [];
-        $password = Str::random(10);
+        $password = $this->faker->password(8);
         $user = User::factory()
             ->set('password', bcrypt($password))
             ->create();
