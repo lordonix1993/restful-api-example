@@ -136,7 +136,7 @@ class RegisterTest extends TestCase
         $user_data = [
             'name'      => $this->user['name'],
             'email'     => $this->user['email'],
-            'password'  => Str::random(300)
+            'password'  => Str::random(900)
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)

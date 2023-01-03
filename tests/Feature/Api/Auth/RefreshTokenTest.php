@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class LogoutTest extends TestCase
+class RefreshTokenTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,13 +17,13 @@ class LogoutTest extends TestCase
      *
      * @return void
      */
-    public function test_logout_without_token(): void
+    public function test_refresh_token_without_token(): void
     {
-        $response = $this->post('/api/auth/logout');
-        $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
+        $response = $this->post('/api/auth/refresh');
+        $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.401.middleware')
+                'message' => __('auth.response.422.refresh_token')
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -31,15 +31,16 @@ class LogoutTest extends TestCase
     }
 
     /**
-     * The test which checks response where get authorized user process is fail when token is wrong
+     * The test checks response where don't set token
      * This request must return 401 code
+     *
      * @return void
      */
-    public function test_logout_not_correctly_token(): void
+    public function test_refresh_with_not_correctly_token(): void
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".Str::random(900)
-        ])->post('/api/auth/me');
+        ])->post('/api/auth/logout');
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
@@ -52,11 +53,11 @@ class LogoutTest extends TestCase
     }
 
     /**
-     * The test checks response when logout process is successful
+     * The test which checks response where get authorized user process is successful
      * This request must return 200 code
      * @return void
      */
-    public function test_logout_throw_success(): void
+    public function test_me_get_response_with_successful_token(): void
     {
         $response_login_arr = [];
         $password = Str::random(10);
@@ -83,14 +84,19 @@ class LogoutTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/logout');
+            ])->post('/api/auth/refresh');
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
-                    'success'   => true,
-                    'message'   => __('auth.response.200.logout'),
-                    'error'     => ''
+                    'success' => true,
+                    'error'     => '',
+                    'message' => __('auth.response.200.refresh_token')
+                ])
+                ->assertJsonStructure([
+                    'data' => ['access_token', 'token_type', 'expires_in']
                 ]);
+
+
         }
 
         $this->assertNotEmpty($token);

@@ -38,7 +38,7 @@ class MeTest extends TestCase
     public function test_me_get_response_with_not_correctly_token(): void
     {
         $response = $this->withHeaders([
-            "Authorization" => "Bearer ".Str::random(289)
+            "Authorization" => "Bearer ".Str::random(900)
         ])->post('/api/auth/me');
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)

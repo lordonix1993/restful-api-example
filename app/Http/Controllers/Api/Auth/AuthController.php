@@ -293,8 +293,12 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully refreshed token."),
-     *             @OA\Property(property="error", type="string", example="The token has been blacklisted"),
-     *             @OA\Property(property="data", type="object")
+     *             @OA\Property(property="error", type="string", example=""),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjY0NTQxMDIwLCJleHAiOjE2NjQ1NDQ2MjAsIm5iZiI6MTY2NDU0MTAyMCwianRpIjoiRDE3M2YyYWxjWmE4NTViVyIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T1X55OPe7Fwr"),
+     *                 @OA\Property(property="token_type", type="string", example="bearer"),
+     *                 @OA\Property(property="expires_in", type="string", example="3600"),
+     *             )
      *         )
      *     )
      * )
