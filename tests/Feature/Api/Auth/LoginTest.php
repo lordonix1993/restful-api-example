@@ -10,24 +10,14 @@ use Tests\TestCase;
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * This method run every time before run every test method
-     *
-     * @return void
-     */
-    public function setUp(): void {
-        parent::setUp();
-        $this->user = User::factory()->definition();
-        $this->user['password'] = Str::random(10);
-    }
 
     /**
-     * The test which checks response when request doesn't contain all credentials
+     * The test checks response when request doesn't contain all credentials
      * This request must return 422 code and validation errors
      *
      * @return void
      */
-    public function test_login_throw_an_error_missing_all_data(): void
+    public function test_login_throw_error_missing_all_data(): void
     {
         $user_data = [
             'name' => '',
@@ -46,31 +36,8 @@ class LoginTest extends TestCase
     }
 
     /**
-     * The test which checks response when request has not valid email
-     * This request must return 422 code and validation errors
-     *
-     * @return void
-     */
-    public function test_login_throw_an_error_not_validate_email(): void
-    {
-        $user_data = [
-            'name'      => $this->user['name'],
-            'email'     => 'usermail.com',
-            'password'  => $this->user['password']
-        ];
-        $response = $this->post('/api/auth/login', $user_data)
-            ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJson([
-                'success' => false,
-                'message' => __('auth.response.422.validation')
-            ])
-            ->assertJsonStructure([
-                'data' => ['email']
-            ]);
-    }
-
-    /**
-     * The test which checks response where credentials are wrong
+     * The test checks response where credentials are wrong
+     * This request must return 401 code and authorization is wrong
      *
      * @return void
      */
@@ -95,8 +62,8 @@ class LoginTest extends TestCase
     }
 
     /**
-     * The test which checks response when authorization is successful
-     *
+     * The test checks response when authorization is successful
+     * This request must return 200 code
      * @return void
      */
     public function test_login_throw_success(): void

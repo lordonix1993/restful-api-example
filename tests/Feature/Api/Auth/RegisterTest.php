@@ -26,7 +26,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when request doesn't contain all user data
+     * The test checks response when request doesn't contain all user data
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -50,7 +50,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when request has not valid email
+     * The test checks response when request has not valid email
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -74,7 +74,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when request has not valid email
+     * The test checks response when request has not valid email
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -103,7 +103,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when request has password less than set symbols
+     * The test checks response when request has password less than set symbols
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -127,7 +127,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when request has password less than set symbols
+     * The test checks response when request has password less than set symbols
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -151,7 +151,7 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * The test which checks response when registration is successful
+     * The test checks response when registration is successful
      *
      * @return void
      */
