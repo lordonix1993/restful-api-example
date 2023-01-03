@@ -82,6 +82,7 @@ class LoginTest extends TestCase
             ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.login'),
+                'error'     => '',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]

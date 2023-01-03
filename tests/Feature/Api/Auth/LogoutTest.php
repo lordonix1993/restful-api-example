@@ -4,10 +4,11 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class MeTest extends TestCase
+class LogoutTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,9 +18,9 @@ class MeTest extends TestCase
      *
      * @return void
      */
-    public function test_me_get_response_without_token(): void
+    public function test_logout_without_token(): void
     {
-        $response = $this->post('/api/auth/me');
+        $response = $this->post('/api/auth/logout');
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
                 'success' => false,
@@ -35,7 +36,7 @@ class MeTest extends TestCase
      * This request must return 401 code
      * @return void
      */
-    public function test_me_get_response_with_not_correctly_token(): void
+    public function test_logout_not_correctly_token(): void
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".Str::random(289)
@@ -52,11 +53,11 @@ class MeTest extends TestCase
     }
 
     /**
-     * The test which checks response where get authorized user process is successful
+     * The test checks response when logout process is successful
      * This request must return 200 code
      * @return void
      */
-    public function test_me_get_response_with_successful_token(): void
+    public function test_logout_throw_success(): void
     {
         $response_login_arr = [];
         $password = Str::random(10);
@@ -83,16 +84,13 @@ class MeTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/me');
+            ])->post('/api/auth/logout');
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
-                    'success' => true,
-                    'error'     => '',
-                    'message' => __('auth.response.200.me')
-                ])
-                ->assertJsonStructure([
-                    "data" => ['id', 'name', 'email']
+                    'success'   => true,
+                    'message'   => __('auth.response.200.logout'),
+                    'error'     => ''
                 ]);
         }
 

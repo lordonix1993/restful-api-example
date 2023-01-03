@@ -167,6 +167,7 @@ class RegisterTest extends TestCase
             ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.register'),
+                'error'     => '',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]
