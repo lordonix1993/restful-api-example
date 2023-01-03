@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use GuzzleHttp\Client;
 
 class RegisterTest extends TestCase
 {
@@ -38,25 +37,11 @@ class RegisterTest extends TestCase
             'password' => $this->user['password']
         ];
 
-        $client = new Client();
-        $response = $client->post(config('app.url').'/api/auth/register', ['json' => $user_data]);
-
         $this->userDeleteEmail = $this->user['email'];
-        $response_data = false;
 
-        try {
-            $response_data = json_decode($response->getBody()->getContents(), true);
-            $this->assertEquals($response->getStatusCode(), 200);
-            $this->assertEquals($response_data['message'], __('auth_response.200.register'));
-            $this->assertEquals($response_data['data']['token_type'], 'bear');
-            $this->assertNotEmpty($response_data['data']['token']);
-        } catch(\Exception $err) {}
-
-        $this->assertNotFalse($response_data);
-
-        //$response = $this->post('/api/auth/register', $user_data);
-            /*->assertStatus(self::HTTP_CODE_SUCCESS)
-            ->assertJsonFragment([
+        $response = $this->post('/api/auth/register', $user_data);
+        $response->assertStatus(self::HTTP_CODE_SUCCESS)
+            ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.register'),
                 'data'      => [
@@ -65,19 +50,17 @@ class RegisterTest extends TestCase
             ])
             ->assertJsonStructure([
                 'data' => ['access_token', 'token_type', 'expires_in']
-            ]);*/
+            ]);
 
-
-        /*$token = '';
+        $token = '';
         try {
-            $response_data = $response->decodeResponseJson();
-            if(isset($response_data['data']) && isset($response_data['data']['token'])) {
-                $token = $response_data['data']['token'];
+            $response_data = $response->decodeResponseJson()->json('data');
+            if(isset($response_data['access_token'])) {
+                $token = $response_data['access_token'];
             }
         } catch(\Throwable $err) {}
 
         $this->assertNotEmpty($token);
-        */
     }
 
     /**
@@ -95,7 +78,7 @@ class RegisterTest extends TestCase
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJsonFragment([
+            ->assertJson([
                 'success' => false,
                 'message' => __('auth.response.422.validation')
             ])
@@ -119,7 +102,7 @@ class RegisterTest extends TestCase
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJsonFragment([
+            ->assertJson([
                 'success' => false,
                 'message' => __('auth.response.422.validation')
             ])
@@ -149,7 +132,7 @@ class RegisterTest extends TestCase
         //Create user again using user data above
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJsonFragment([
+            ->assertJson([
                 'success' => false,
                 'message' => __('auth.response.422.validation')
             ])
@@ -173,7 +156,7 @@ class RegisterTest extends TestCase
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJsonFragment([
+            ->assertJson([
                 'success' => false,
                 'message' => __('auth.response.422.validation')
             ])
@@ -197,7 +180,7 @@ class RegisterTest extends TestCase
         ];
         $this->post('/api/auth/register', $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
-            ->assertJsonFragment([
+            ->assertJson([
                 'success' => false,
                 'message' => __('auth.response.422.validation')
             ])
