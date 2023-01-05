@@ -19,7 +19,7 @@ class RefreshTokenTest extends TestCase
      */
     public function test_refresh_token_without_token(): void
     {
-        $response = $this->post('/api/auth/refresh');
+        $response = $this->post(route('auth_refresh_token'));
         $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -40,12 +40,12 @@ class RefreshTokenTest extends TestCase
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".$this->faker->sha256()
-        ])->post('/api/auth/logout');
+        ])->post(route('auth_refresh_token'));
 
-        $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
+        $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.401.middleware')
+                'message' => __('auth.response.422.refresh_token')
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -65,7 +65,7 @@ class RefreshTokenTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post('/api/auth/login', [
+        $response_login = $this->post(route('auth_login'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -84,7 +84,7 @@ class RefreshTokenTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/refresh');
+            ])->post(route('auth_refresh_token'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
@@ -113,7 +113,7 @@ class RefreshTokenTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post('/api/auth/login', [
+        $response_login = $this->post(route('auth_login'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -132,7 +132,7 @@ class RefreshTokenTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/refresh');
+            ])->post(route('auth_refresh_token'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
@@ -146,7 +146,7 @@ class RefreshTokenTest extends TestCase
 
             $response_again = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/refresh');
+            ])->post(route('auth_refresh_token'));
 
             $response_again->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
                 ->assertJson([

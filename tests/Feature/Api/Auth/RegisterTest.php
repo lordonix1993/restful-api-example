@@ -37,7 +37,7 @@ class RegisterTest extends TestCase
             'email'     => '',
             'password'  => ''
         ];
-        $this->post('/api/auth/register', $user_data)
+        $this->post(route('auth_registration'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -61,7 +61,7 @@ class RegisterTest extends TestCase
             'email'     => 'usermail.com',
             'password'  => $this->user['password']
         ];
-        $this->post('/api/auth/register', $user_data)
+        $this->post(route('auth_registration'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -90,7 +90,7 @@ class RegisterTest extends TestCase
         ];
 
         //Create user again using user data above
-        $this->post('/api/auth/register', $user_data)
+        $this->post(route('auth_registration'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -114,7 +114,7 @@ class RegisterTest extends TestCase
             'email'     => $this->user['email'],
             'password'  => $this->faker->password(1,5)
         ];
-        $this->post('/api/auth/register', $user_data)
+        $this->post(route('auth_registration'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -138,7 +138,7 @@ class RegisterTest extends TestCase
             'email'     => $this->user['email'],
             'password'  => $this->faker->password(300, 300)
         ];
-        $this->post('/api/auth/register', $user_data)
+        $this->post(route('auth_registration'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -162,7 +162,7 @@ class RegisterTest extends TestCase
             'password'  => $this->user['password']
         ];
 
-        $response = $this->post('/api/auth/register', $user_data);
+        $response = $this->post(route('auth_registration'), $user_data);
         $response->assertStatus(self::HTTP_CODE_SUCCESS)
             ->assertJson([
                 'success'   => true,

@@ -24,7 +24,7 @@ class LoginTest extends TestCase
             'password' => ''
         ];
 
-        $this->post('/api/auth/login', $user_data)
+        $this->post(route('auth_login'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -48,7 +48,7 @@ class LoginTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response = $this->post('/api/auth/login', [
+        $response = $this->post(route('auth_login'), [
             'email'     => $this->faker->unique()->freeEmail(),
             'password'  => $this->faker->password(8)
         ]);
@@ -73,7 +73,7 @@ class LoginTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response = $this->post('/api/auth/login', [
+        $response = $this->post(route('auth_login'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);

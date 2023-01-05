@@ -19,7 +19,7 @@ class LogoutTest extends TestCase
      */
     public function test_logout_without_token(): void
     {
-        $response = $this->post('/api/auth/logout');
+        $response = $this->post(route('auth_logout'));
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
                 'success' => false,
@@ -39,7 +39,7 @@ class LogoutTest extends TestCase
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".$this->faker->sha256()
-        ])->post('/api/auth/me');
+        ])->post(route('auth_logout'));
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
@@ -64,7 +64,7 @@ class LogoutTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post('/api/auth/login', [
+        $response_login = $this->post(route('auth_login'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -83,7 +83,7 @@ class LogoutTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post('/api/auth/logout');
+            ])->post(route('auth_logout'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
