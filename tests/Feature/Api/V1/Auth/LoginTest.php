@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\V1\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,11 +24,12 @@ class LoginTest extends TestCase
             'password'  => ''
         ];
 
-        $response = $this->post(route('auth_login'), $user_data)
+        $response = $this->post(route('auth_login_v1'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v1'
             ])
             ->assertJsonStructure([
                 'data' => ['password', 'email']
@@ -48,7 +49,7 @@ class LoginTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response = $this->post(route('auth_login'), [
+        $response = $this->post(route('auth_login_v1'), [
             'email'     => $this->faker->unique()->freeEmail(),
             'password'  => $this->faker->password(8)
         ]);
@@ -57,6 +58,7 @@ class LoginTest extends TestCase
             ->assertJson([
                 'success'   => false,
                 'message'   => __('auth.response.401.login'),
+                'version' => 'v1',
                 'data'      => []
             ]);
     }
@@ -73,7 +75,7 @@ class LoginTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response = $this->post(route('auth_login'), [
+        $response = $this->post(route('auth_login_v1'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -82,6 +84,7 @@ class LoginTest extends TestCase
             ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.login'),
+                'version' => 'v1',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]

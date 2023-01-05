@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\V2\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,10 +19,11 @@ class RefreshTokenTest extends TestCase
      */
     public function test_refresh_token_without_token(): void
     {
-        $response = $this->post(route('auth_refresh_token'));
+        $response = $this->post(route('auth_refresh_token_v2'));
         $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -39,11 +40,12 @@ class RefreshTokenTest extends TestCase
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".$this->faker->sha256()
-        ])->post(route('auth_refresh_token'));
+        ])->post(route('auth_refresh_token_v2'));
 
         $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
-                'success' => false
+                'success' => false,
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -63,7 +65,7 @@ class RefreshTokenTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post(route('auth_login'), [
+        $response_login = $this->post(route('auth_login_v2'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -71,6 +73,7 @@ class RefreshTokenTest extends TestCase
         $response_login->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.login'),
+                'version'   => 'v2',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]
@@ -92,11 +95,12 @@ class RefreshTokenTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post(route('auth_refresh_token'));
+            ])->post(route('auth_refresh_token_v2'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success' => true,
+                    'version' => 'v2',
                     'message' => __('auth.response.200.refresh_token')
                 ])
                 ->assertJsonStructure([
@@ -120,7 +124,7 @@ class RefreshTokenTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post(route('auth_login'), [
+        $response_login = $this->post(route('auth_login_v2'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -128,6 +132,7 @@ class RefreshTokenTest extends TestCase
         $response_login->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.login'),
+                'version'   => 'v2',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]
@@ -150,11 +155,12 @@ class RefreshTokenTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post(route('auth_refresh_token'));
+            ])->post(route('auth_refresh_token_v2'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success' => true,
+                    'version' => 'v2',
                     'message' => __('auth.response.200.refresh_token')
                 ])
                 ->assertJsonStructure([
@@ -163,7 +169,7 @@ class RefreshTokenTest extends TestCase
 
             $response_again = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post(route('auth_refresh_token'));
+            ])->post(route('auth_refresh_token_v2'));
 
             $response_again->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
                 ->assertJson([

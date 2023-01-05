@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\V2\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,11 +19,12 @@ class LogoutTest extends TestCase
      */
     public function test_logout_without_token(): void
     {
-        $response = $this->post(route('auth_logout'));
+        $response = $this->post(route('auth_logout_v2'));
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.401.middleware')
+                'message' => __('auth.response.401.middleware'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -39,12 +40,13 @@ class LogoutTest extends TestCase
     {
         $response = $this->withHeaders([
             "Authorization" => "Bearer ".$this->faker->sha256()
-        ])->post(route('auth_logout'));
+        ])->post(route('auth_logout_v2'));
 
         $response->assertStatus(self::HTTP_CODE_UNAUTHORIZED)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.401.middleware')
+                'message' => __('auth.response.401.middleware'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -64,7 +66,7 @@ class LogoutTest extends TestCase
             ->set('password', bcrypt($password))
             ->create();
 
-        $response_login = $this->post(route('auth_login'), [
+        $response_login = $this->post(route('auth_login_v2'), [
             'email'     => $user['email'],
             'password'  => $password
         ]);
@@ -83,12 +85,13 @@ class LogoutTest extends TestCase
 
             $response = $this->withHeaders([
                 "Authorization" => "Bearer ".$token
-            ])->post(route('auth_logout'));
+            ])->post(route('auth_logout_v2'));
 
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success'   => true,
                     'message'   => __('auth.response.200.logout'),
+                    'version'   => 'v2'
                 ]);
         }
 

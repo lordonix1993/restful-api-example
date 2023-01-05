@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\V2\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,11 +39,12 @@ class RegisterTest extends TestCase
             'password_confirmation' => '',
         ];
 
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['password', 'name', 'email', 'password_confirmation']
@@ -65,11 +66,12 @@ class RegisterTest extends TestCase
             'password_confirmation' => $this->faker->password(8),
         ];
 
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['password']
@@ -91,11 +93,12 @@ class RegisterTest extends TestCase
             'password_confirmation' => $this->user['password'],
         ];
 
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['email']
@@ -121,11 +124,12 @@ class RegisterTest extends TestCase
         ];
 
         //Create user again using user data above
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['email']
@@ -146,11 +150,12 @@ class RegisterTest extends TestCase
             'password'  => $this->faker->password(1,5)
         ];
 
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['password']
@@ -171,11 +176,12 @@ class RegisterTest extends TestCase
             'password'  => $this->faker->password(300, 300)
         ];
 
-        $this->post(route('auth_registration'), $user_data)
+        $this->post(route('auth_registration_v2'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.validation')
+                'message' => __('auth.response.422.validation'),
+                'version' => 'v2'
             ])
             ->assertJsonStructure([
                 'data' => ['password']
@@ -196,11 +202,12 @@ class RegisterTest extends TestCase
             'password_confirmation' => $this->user['password'],
         ];
 
-        $response = $this->post(route('auth_registration'), $user_data);
+        $response = $this->post(route('auth_registration_v2'), $user_data);
         $response->assertStatus(self::HTTP_CODE_SUCCESS)
             ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.register'),
+                'version'   => 'v2',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]

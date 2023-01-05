@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Api\V1\AbstractApiController;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegistrationRequest;
+use App\Http\Requests\Api\V1\Auth\LoginRequest;
+use App\Http\Requests\Api\V1\Auth\RegistrationRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;

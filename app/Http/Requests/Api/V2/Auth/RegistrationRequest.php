@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Api\V2\Auth;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,6 +34,7 @@ class RegistrationRequest extends FormRequest
         throw new HttpResponseException(response()->json([
             'success'   => false,
             'message'   => __('auth.response.422.validation'),
+            'version'   => 'v2',
             'data'      => $validator->errors()
         ], 422));
     }

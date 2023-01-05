@@ -49,7 +49,7 @@ abstract class AbstractApiController extends Controller
             'success'   => $code == 200 ? true : false,
             'message'   => $message,
             'data'      => [],
-            'version'   => 1
+            'version'   => 'v1'
         ];
         if(!empty($data)) $json['data'] = $data;
         return response()->json($json, $code);
