@@ -17,12 +17,11 @@ abstract class AbstractApiController extends Controller
      *
      * @return JsonResponse
      */
-    protected function responseJSON(string $message, int $code = 200, array $data = [], string | array $error = ''): JsonResponse
+    protected function responseJSON(string $message, int $code = 200, array $data = []): JsonResponse
     {
         $json = [
             'success'   => $code == 200 ? true : false,
             'message'   => $message,
-            'error'     => $error,
             'data'      => []
         ];
         if(!empty($data)) $json['data'] = $data;

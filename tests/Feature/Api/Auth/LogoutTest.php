@@ -31,7 +31,7 @@ class LogoutTest extends TestCase
     }
 
     /**
-     * The test which checks response where get authorized user process is fail when token is wrong
+     * The test which checks response where get authorized user process is fail where token is wrong
      * This request must return 401 code
      * @return void
      */
@@ -52,7 +52,7 @@ class LogoutTest extends TestCase
     }
 
     /**
-     * The test checks response when logout process is successful
+     * The test checks response where logout process is successful
      * This request must return 200 code
      * @return void
      */
@@ -89,7 +89,6 @@ class LogoutTest extends TestCase
                 ->assertJson([
                     'success'   => true,
                     'message'   => __('auth.response.200.logout'),
-                    'error'     => ''
                 ]);
         }
 

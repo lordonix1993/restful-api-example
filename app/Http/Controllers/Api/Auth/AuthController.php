@@ -38,6 +38,7 @@ class AuthController extends AbstractApiController
      *             @OA\Property(property="name", type="string", example="user"),
      *             @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
      *             @OA\Property(property="password", type="string", format="password", example="PassWord12345"),
+     *             @OA\Property(property="password_confirmation", type="string", format="password", example="PassWord12345"),
      *         ),
      *     ),
      *     @OA\Response(
@@ -46,7 +47,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
      *             @OA\Property(property="message", type="string", example="Validation errors."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="name", type="array",
      *                     @OA\Items(type="string", example="The name is required.")
@@ -66,7 +66,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully registered."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjY0NTQxMDIwLCJleHAiOjE2NjQ1NDQ2MjAsIm5iZiI6MTY2NDU0MTAyMCwianRpIjoiRDE3M2YyYWxjWmE4NTViVyIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T1X55OPe7Fwr"),
      *                 @OA\Property(property="token_type", type="string", example="bearer"),
@@ -118,7 +117,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
      *             @OA\Property(property="message", type="string", example="Validation errors."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="email", type="array",
      *                     @OA\Items(type="string", example="The email is required or has already been taken.")
@@ -134,8 +132,7 @@ class AuthController extends AbstractApiController
      *         description="Unauthorized. Your credentials are wrong",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
-     *             @OA\Property(property="message", type="string", example="Unauthorized."),
-     *             @OA\Property(property="error", type="string", example=""),
+     *             @OA\Property(property="message", type="string", example="Unauthorized. Your credentials are wrong"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     ),
@@ -145,7 +142,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully logged in."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjY0NTQxMDIwLCJleHAiOjE2NjQ1NDQ2MjAsIm5iZiI6MTY2NDU0MTAyMCwianRpIjoiRDE3M2YyYWxjWmE4NTViVyIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T1X55OPe7Fwr"),
      *                 @OA\Property(property="token_type", type="string", example="bearer"),
@@ -181,8 +177,7 @@ class AuthController extends AbstractApiController
      *         description="Unauthorized.",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
-     *             @OA\Property(property="message", type="string", example="Unauthorized."),
-     *             @OA\Property(property="error", type="string", example="Token not provided"),
+     *             @OA\Property(property="message", type="string", example="Token not provided"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     ),
@@ -192,7 +187,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully logged in."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id", type="string", example="1"),
      *                 @OA\Property(property="name", type="string", example="User"),
@@ -232,8 +226,7 @@ class AuthController extends AbstractApiController
      *         description="Unauthorized.",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
-     *             @OA\Property(property="message", type="string", example="Unauthorized."),
-     *             @OA\Property(property="error", type="string", example="Token not provided"),
+     *             @OA\Property(property="message", type="string", example="Token not provided"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     ),
@@ -243,7 +236,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully logged out."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object")
      *         )
      *     )
@@ -272,18 +264,7 @@ class AuthController extends AbstractApiController
      *         description="Unauthorized.",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="false"),
-     *             @OA\Property(property="message", type="string", example="Refresh token failed."),
-     *             @OA\Property(property="error", type="string", example="The token has been blacklisted"),
-     *             @OA\Property(property="data", type="object")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized.",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="string", example="false"),
-     *             @OA\Property(property="message", type="string", example="Unauthorized."),
-     *             @OA\Property(property="error", type="string", example="Token not provided"),
+     *             @OA\Property(property="message", type="string", example="The token has been blacklisted"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     ),
@@ -293,7 +274,6 @@ class AuthController extends AbstractApiController
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="string", example="true"),
      *             @OA\Property(property="message", type="string", example="You have successfully refreshed token."),
-     *             @OA\Property(property="error", type="string", example=""),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjY0NTQxMDIwLCJleHAiOjE2NjQ1NDQ2MjAsIm5iZiI6MTY2NDU0MTAyMCwianRpIjoiRDE3M2YyYWxjWmE4NTViVyIsInN1YiI6IjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T1X55OPe7Fwr"),
      *                 @OA\Property(property="token_type", type="string", example="bearer"),
@@ -318,7 +298,7 @@ class AuthController extends AbstractApiController
             }
             return $this->responseJSON(__('auth.response.422.token'), 422);
         } catch(TokenBlacklistedException | JWTException $err) {
-            return $this->responseJSON(__('auth.response.422.refresh_token'), 422, [], $err->getMessage());
+            return $this->responseJSON($err->getMessage(), 422, []);
         }
     }
 

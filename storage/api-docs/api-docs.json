@@ -11,7 +11,7 @@
     "servers": [
         {
             "url": "http://api-google-ads.loc/",
-            "description": "Demo API Server"
+            "description": "Google Ads API Server"
         }
     ],
     "paths": {
@@ -48,6 +48,11 @@
                                         "type": "string",
                                         "format": "password",
                                         "example": "PassWord12345"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "PassWord12345"
                                     }
                                 },
                                 "type": "object"
@@ -69,10 +74,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Validation errors."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "properties": {
@@ -119,10 +120,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have successfully registered."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "properties": {
@@ -200,10 +197,6 @@
                                             "type": "string",
                                             "example": "Validation errors."
                                         },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
-                                        },
                                         "data": {
                                             "properties": {
                                                 "email": {
@@ -241,11 +234,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Unauthorized."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
+                                            "example": "Unauthorized. Your credentials are wrong"
                                         },
                                         "data": {
                                             "type": "object"
@@ -269,10 +258,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have successfully logged in."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "properties": {
@@ -321,10 +306,6 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Unauthorized."
-                                        },
-                                        "error": {
-                                            "type": "string",
                                             "example": "Token not provided"
                                         },
                                         "data": {
@@ -349,10 +330,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have successfully logged in."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "properties": {
@@ -418,10 +395,6 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Unauthorized."
-                                        },
-                                        "error": {
-                                            "type": "string",
                                             "example": "Token not provided"
                                         },
                                         "data": {
@@ -446,10 +419,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have successfully logged out."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "type": "object"
@@ -489,38 +458,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Refresh token failed."
-                                        },
-                                        "error": {
-                                            "type": "string",
                                             "example": "The token has been blacklisted"
-                                        },
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "string",
-                                            "example": "false"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Token not provided"
                                         },
                                         "data": {
                                             "type": "object"
@@ -544,10 +482,6 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have successfully refreshed token."
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": ""
                                         },
                                         "data": {
                                             "properties": {

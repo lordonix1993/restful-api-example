@@ -12,7 +12,7 @@ class LoginTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /**
-     * The test checks response when request doesn't contain all credentials
+     * The test checks response where request doesn't contain all credentials
      * This request must return 422 code and validation errors
      *
      * @return void
@@ -20,11 +20,11 @@ class LoginTest extends TestCase
     public function test_login_throw_error_missing_all_data(): void
     {
         $user_data = [
-            'name' => '',
-            'password' => ''
+            'name'      => '',
+            'password'  => ''
         ];
 
-        $this->post(route('auth_login'), $user_data)
+        $response = $this->post(route('auth_login'), $user_data)
             ->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
@@ -41,7 +41,7 @@ class LoginTest extends TestCase
      *
      * @return void
      */
-    public function test_login_throw_error_when_credentials_are_wrong(): void
+    public function test_login_throw_error_where_credentials_are_wrong(): void
     {
         $password = $this->faker->password(8);
         User::factory()
@@ -62,7 +62,7 @@ class LoginTest extends TestCase
     }
 
     /**
-     * The test checks response when authorization is successful
+     * The test checks response where authorization is successful
      * This request must return 200 code
      * @return void
      */
@@ -82,7 +82,6 @@ class LoginTest extends TestCase
             ->assertJson([
                 'success'   => true,
                 'message'   => __('auth.response.200.login'),
-                'error'     => '',
                 'data'      => [
                     'token_type' => 'bearer'
                 ]

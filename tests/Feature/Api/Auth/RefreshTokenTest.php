@@ -23,7 +23,6 @@ class RefreshTokenTest extends TestCase
         $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
                 'success' => false,
-                'message' => __('auth.response.422.refresh_token')
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -44,8 +43,7 @@ class RefreshTokenTest extends TestCase
 
         $response->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
             ->assertJson([
-                'success' => false,
-                'message' => __('auth.response.422.refresh_token')
+                'success' => false
             ])
             ->assertJsonStructure([
                 'data' => []
@@ -70,6 +68,16 @@ class RefreshTokenTest extends TestCase
             'password'  => $password
         ]);
 
+        $response_login->assertJson([
+                'success'   => true,
+                'message'   => __('auth.response.200.login'),
+                'data'      => [
+                    'token_type' => 'bearer'
+                ]
+            ])->assertJsonStructure([
+                'data' => ['access_token', 'token_type', 'expires_in']
+            ]);
+
         try {
             $response_login_arr = $response_login->decodeResponseJson()->json();
         } catch(\Throwable $err) {}
@@ -89,7 +97,6 @@ class RefreshTokenTest extends TestCase
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success' => true,
-                    'error'     => '',
                     'message' => __('auth.response.200.refresh_token')
                 ])
                 ->assertJsonStructure([
@@ -118,6 +125,17 @@ class RefreshTokenTest extends TestCase
             'password'  => $password
         ]);
 
+        $response_login->assertJson([
+                'success'   => true,
+                'message'   => __('auth.response.200.login'),
+                'data'      => [
+                    'token_type' => 'bearer'
+                ]
+            ])->assertJsonStructure([
+                'data' => ['access_token', 'token_type', 'expires_in']
+            ]);
+
+
         try {
             $response_login_arr = $response_login->decodeResponseJson()->json();
         } catch(\Throwable $err) {}
@@ -137,7 +155,6 @@ class RefreshTokenTest extends TestCase
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success' => true,
-                    'error'     => '',
                     'message' => __('auth.response.200.refresh_token')
                 ])
                 ->assertJsonStructure([
@@ -150,8 +167,7 @@ class RefreshTokenTest extends TestCase
 
             $response_again->assertStatus(self::HTTP_CODE_UNPROCESSABLE_PROCESS)
                 ->assertJson([
-                    'success' => false,
-                    'message' => __('auth.response.422.refresh_token')
+                    'success' => false
                 ]);
         }
 

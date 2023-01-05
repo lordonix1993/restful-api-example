@@ -26,7 +26,6 @@ class JWTAuth extends BaseMiddleware
             $json = [
                 'success'   => false,
                 'message'   => __('auth.response.401.middleware'),
-                'error'     => $err->getMessage(),
                 'data'      => []
             ];
             return response()->json($json, 401);

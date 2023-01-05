@@ -31,7 +31,7 @@ class MeTest extends TestCase
     }
 
     /**
-     * The test which checks response where get authorized user process is fail when token is wrong
+     * The test which checks response where get authorized user process is fail where token is wrong
      * This request must return 401 code
      * @return void
      */
@@ -69,6 +69,17 @@ class MeTest extends TestCase
             'password'  => $password
         ]);
 
+        $response_login->assertJson([
+                'success'   => true,
+                'message'   => __('auth.response.200.login'),
+                'data'      => [
+                    'token_type' => 'bearer'
+                ]
+            ])
+            ->assertJsonStructure([
+                'data' => ['access_token', 'token_type', 'expires_in']
+            ]);
+
         try {
             $response_login_arr = $response_login->decodeResponseJson()->json();
         } catch(\Throwable $err) {}
@@ -88,7 +99,6 @@ class MeTest extends TestCase
             $response->assertStatus(self::HTTP_CODE_SUCCESS)
                 ->assertJson([
                     'success' => true,
-                    'error'     => '',
                     'message' => __('auth.response.200.me')
                 ])
                 ->assertJsonStructure([
