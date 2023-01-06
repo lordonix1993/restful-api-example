@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 /**
  * @OA\Info(
  *      version="1.0.0",
- *      title="Google Ads App",
+ *      title="Google Ads App Version 1",
  *      description="Google Ads App project",
  *      @OA\Contact(
  *          email="admin@admin.com"
@@ -24,10 +24,6 @@ use Illuminate\Http\JsonResponse;
  *   bearerFormat="JWT",
  * )
  *
- * @OA\Server(
- *      url="http://test-laravel.loc/api/V1",
- *      description="Google Ads API Server"
- * )
  */
 
 

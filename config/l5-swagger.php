@@ -3,16 +3,18 @@
 return [
     'default' => 'default',
     'documentations' => [
-        'default' => [
+        'v1' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Google Ads Api Version 1',
             ],
 
             'routes' => [
                 /*
                  * Route for accessing api documentation interface
                 */
-                'api' => 'api/documentation',
+                'api' => '/api/documentation/v1/',
+                'docs' => '/api/v1/',
+                'oauth2_callback' => '/api/v1/callback'
             ],
             'paths' => [
                 /*
@@ -23,12 +25,12 @@ return [
                 /*
                  * File name of the generated json documentation file
                 */
-                'docs_json' => 'api-docs.json',
+                'docs_json' => 'api-docs-v1.json',
 
                 /*
                  * File name of the generated YAML documentation file
                 */
-                'docs_yaml' => 'api-docs.yaml',
+                'docs_yaml' => 'api-docs-v1.yaml',
 
                 /*
                 * Set this to `json` or `yaml` to determine which documentation file to use in UI
@@ -39,7 +41,50 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                 */
                 'annotations' => [
-                    base_path('app'),
+                    base_path('app')."/Http/Controllers/Api/V1",
+                ],
+
+            ],
+        ],
+        'v2' => [
+            'api' => [
+                'title' => 'Google Ads Api Version 2',
+            ],
+
+            'routes' => [
+                /*
+                 * Route for accessing api documentation interface
+                */
+                'api' => '/api/documentation/v2/',
+                'docs' => '/api/v2/',
+                'oauth2_callback' => '/api/v2/callback'
+            ],
+            'paths' => [
+                /*
+                 * Edit to include full URL in ui for assets
+                */
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                /*
+                 * File name of the generated json documentation file
+                */
+                'docs_json' => 'api-docs-v2.json',
+
+                /*
+                 * File name of the generated YAML documentation file
+                */
+                'docs_yaml' => 'api-docs-v2.yaml',
+
+                /*
+                * Set this to `json` or `yaml` to determine which documentation file to use in UI
+                */
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                /*
+                 * Absolute paths to directory containing the swagger annotations are stored.
+                */
+                'annotations' => [
+                    base_path('app')."/Http/Controllers/Api/V2",
                 ],
 
             ],
@@ -294,7 +339,8 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://api-google-ads.loc/'),
+            'L5_SWAGGER_CONST_HOST_V1' => env('L5_SWAGGER_CONST_HOST_V1', ''),
+            'L5_SWAGGER_CONST_HOST_V2' => env('L5_SWAGGER_CONST_HOST_V2', ''),
         ],
     ],
 ];
