@@ -36,14 +36,14 @@ class RouteServiceProvider extends ServiceProvider
                 'namespace'  => "{$this->apiNamespace}\V1",
                 'prefix'     => 'api/v1',
             ], function ($router) {
-                require base_path('routes/api_v1.php');
+                require base_path('routes/api/api_v1.php');
             });
             Route::group([
                 'middleware' => ['api', 'api_version_set:v2'],
                 'namespace'  => "{$this->apiNamespace}\V2",
                 'prefix'     => 'api/v2',
             ], function ($router) {
-                require base_path('routes/api_v2.php');
+                require base_path('routes/api/api_v2.php');
             });
             /*Route::middleware('api')
                 ->prefix('api')
