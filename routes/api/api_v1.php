@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Facades\LocalizationFacade;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function ($router) {
-    Route::post('logout', 'AuthController@logout')->middleware('jwt')->name('auth_logout_v1');
-    Route::post('me', 'AuthController@me')->middleware('jwt')->name('auth_me_v1');
-    Route::post('login', 'AuthController@login')->name('auth_login_v1');
-    Route::post('register', 'AuthController@registration')->name('auth_registration_v1');
-    Route::post('refresh', 'AuthController@refresh')->name('auth_refresh_token_v1');
+Route::group(['prefix' => LocalizationFacade::locale(), 'middleware' => ['set_locale']], function($router) {
+    Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function ($router) {
+        Route::post('logout', 'AuthController@logout')->middleware('jwt')->name('auth_logout_v1');
+        Route::post('me', 'AuthController@me')->middleware('jwt')->name('auth_me_v1');
+        Route::post('login', 'AuthController@login')->name('auth_login_v1');
+        Route::post('register', 'AuthController@registration')->name('auth_registration_v1');
+        Route::post('refresh', 'AuthController@refresh')->name('auth_refresh_token_v1');
+    });
 });
