@@ -139,7 +139,7 @@ return [
     'starts_with' => ':attribute має починатись одним з наступних: :values.',
     'string' => ':attribute має бути рядком.',
     'timezone' => ':attribute має бути дійсний часовий пояс.',
-    'unique' => ':attribute вже взято.',
+    'unique' => ':attribute вже існує.',
     'uploaded' => ':attribute не вдалося завантажити.',
     'uppercase' => ':attribute не відвідайте завантажити.',
     'url' => ':attribute має бути дійсною URL-адресою.',
